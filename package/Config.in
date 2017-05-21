@@ -344,6 +344,7 @@ endmenu
 menu "Hardware handling"
 menu "Firmware"
 	source "package/am33x-cm3/Config.in"
+	source "package/ath10k-firmware/Config.in"
 	source "package/b43-firmware/Config.in"
 	source "package/linux-firmware/Config.in"
 	source "package/rpi-bt-firmware/Config.in"
