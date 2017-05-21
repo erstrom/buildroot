@@ -66,6 +66,10 @@ config BR2_KERNEL_HEADERS_4_11
 	bool "Linux 4.11.x kernel headers"
 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11
 
+config BR2_KERNEL_HEADERS_4_12
+	bool "Linux 4.12.x kernel headers"
+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
+
 config BR2_KERNEL_HEADERS_VERSION
 	bool "Manually specified Linux version"
 
@@ -86,6 +90,10 @@ choice
 
 	  This is used to hide/show some packages that have strict
 	  requirements on the version of kernel headers.
+
+config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_12
+	bool "4.12.x"
+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
 
 config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11
 	bool "4.11.x"
