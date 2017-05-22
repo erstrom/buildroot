@@ -1,0 +1,25 @@
+#! /bin/sh
+
+ATH10K_USB_FW_DIR="lib/firmware/ath10k/QCA9377/hw1.0"
+ATH10K_USB_BOARD_FILE="eeprom_qca9377_7_1p1_Robin_clpc_ce.bin"
+ATH10K_USB_BOARD_SYMLINK="board-usb.bin"
+
+case "$1" in
+  start)
+	[ -f ${ATH10K_USB_FW_DIR}/${ATH10K_USB_BOARD_FILE} ] && \
+		ln -s $ATH10K_USB_BOARD_FILE ${ATH10K_USB_FW_DIR}/${ATH10K_USB_BOARD_SYMLINK}
+	[ $? = 0 ] && echo "OK" || echo "FAIL"
+	;;
+  stop)
+	echo "OK"
+	;;
+  restart|reload)
+	"$0" stop
+	"$0" start
+	;;
+  *)
+	echo "Usage: $0 {start|stop|restart}"
+	exit 1
+esac
+
+exit $?
