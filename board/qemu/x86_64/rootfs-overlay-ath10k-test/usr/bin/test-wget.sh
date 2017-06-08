@@ -1,3 +1,3 @@
 #! /bin/sh
 
-wget --no-check-certificate https://git.kernel.org/torvalds/t/linux-4.12-rc2.tar.gz
+wget --no-check-certificate https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-4.11.4.tar.xz
