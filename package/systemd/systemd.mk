@@ -322,6 +322,19 @@ define SYSTEMD_INSTALL_NETWORK_CONFS
 		$(TARGET_DIR)/etc/systemd/network/dhcp.network
 endef
 endif
+define SYSTEMD_INSTALL_SERVICE_NETWORK
+	ln -sf ../../../usr/lib/systemd/system/systemd-networkd.service \
+		$(TARGET_DIR)/etc/systemd/system/dbus-org.freedesktop.network1.service
+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+	ln -sf ../../../../usr/lib/systemd/system/systemd-networkd.service \
+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/systemd-networkd.service
+	mkdir -p $(TARGET_DIR)/etc/systemd/system/sockets.target.wants
+	ln -sf ../../../../usr/lib/systemd/system/systemd-networkd.socket \
+		$(TARGET_DIR)/etc/systemd/system/sockets.target.wants/systemd-networkd.socket
+	mkdir -p $(TARGET_DIR)/etc/systemd/system/network-online.target.wants
+	ln -sf ../../../../usr/lib/systemd/system/systemd-networkd-wait-online.service \
+		$(TARGET_DIR)/etc/systemd/system/network-online.target.wants/systemd-networkd-wait-online.service
+endef
 else
 SYSTEMD_CONF_OPTS += -Dnetworkd=false
 endif
@@ -329,6 +342,13 @@ endif
 ifeq ($(BR2_PACKAGE_SYSTEMD_RESOLVED),y)
 SYSTEMD_CONF_OPTS += -Dresolve=true
 SYSTEMD_RESOLVED_USER = systemd-resolve -1 systemd-resolve -1 * - - - Network Name Resolution Manager
+define SYSTEMD_INSTALL_SERVICE_RESOLVE
+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+	ln -sf ../../../../usr/lib/systemd/system/systemd-resolved.service \
+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/systemd-resolved.service
+	ln -sf ../../../usr/lib/systemd/system/systemd-resolved.service \
+		$(TARGET_DIR)/etc/systemd/system/dbus-org.freedesktop.resolve1.service
+endef
 else
 SYSTEMD_CONF_OPTS += -Dresolve=false
 endif
@@ -463,6 +483,8 @@ define SYSTEMD_INSTALL_INIT_SYSTEMD
 	$(SYSTEMD_INSTALL_SERVICE_TTY)
 	$(SYSTEMD_INSTALL_SERVICE_TIMESYNC)
 	$(SYSTEMD_INSTALL_NETWORK_CONFS)
+	$(SYSTEMD_INSTALL_SERVICE_RESOLVE)
+	$(SYSTEMD_INSTALL_SERVICE_NETWORK)
 endef
 
 SYSTEMD_CONF_ENV = $(HOST_UTF8_LOCALE_ENV)
